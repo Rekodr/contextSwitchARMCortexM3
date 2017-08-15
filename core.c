@@ -59,18 +59,18 @@ void lock_init(unsigned *lock)
 extern unsigned lock_acquire(unsigned *lock) __attribute__((naked));
 unsigned lock_acquire(unsigned *lock){
     asm volatile(
-        "MOV r1, #0\n"
-        "LDREX r2, [r0]\n"
-        "CMP r2, r1\n"
-        "ITT NE\n"
+        "mov r1, #0\n"
+        "ldrex r2, [r0]\n"
+        "cmp r2, r1\n"
+        "itt ne\n"
         "STREXNE r2, r1, [r0]\n"
-        "CMPNE r2, #1\n"
-        "BEQ 1f\n"
-        "MOV  r0, #1\n"
-        "BX lr\n"
+        "cmpne r2, #1\n"
+        "beq 1f\n"
+        "mov  r0, #1\n"
+        "bx lr\n"
         "1:\n"
-        "CLREX\n"
-        "MOV r0, #0\n"
-        "BX lr"
+        "clrex\n"
+        "mov r0, #0\n"
+        "bx lr"
     );
 }

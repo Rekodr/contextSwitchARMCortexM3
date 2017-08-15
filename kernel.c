@@ -112,7 +112,7 @@ void TaskSelect(){
 
   if(save == 0){
        presentThread = &threads[currThread]; 
-       asm volatile ("MSR PSP, %0" : : "r" (presentThread->state[8]));
+       asm volatile ("msr psp, %0" : : "r" (presentThread->state[8]));
       save = 1; 
   }
    IntMasterEnable();
@@ -123,7 +123,7 @@ void TaskSelect(){
 void SwitchContext(){
   
  // IntMasterDisable();
-  asm volatile("MRS r12, PSP\n");
+  asm volatile("mrs r12, psp\n");
   asm volatile("stm %0, {r4-r12}" : : "r" (presentThread->state));
   // if(presentThread->active == 0){
   //   free(presentThread->stack); 
@@ -131,7 +131,7 @@ void SwitchContext(){
   asm volatile("ldm %0, {r4-r12}" : : "r" (threads[currThread].state));
   //IntMasterEnable();
   asm volatile(
-            "MSR PSP, r12\n"
+            "msr psp, r12\n"
             "mrs r0, CONTROL\n"
             "orr r0, 0x1\n"
             "msr CONTROL, r0\n"
