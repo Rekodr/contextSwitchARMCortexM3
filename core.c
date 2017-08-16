@@ -16,7 +16,7 @@ extern void createThread(unsigned* state, char* stack) __attribute__((naked));
 void createThread(unsigned* state, char* stack){
     asm volatile(
         "subs    r5, r1, #32\n"
-        "stmea   r5!, { r0-r3, r12, r14 }\n"
+        "stmea   r5!, { r0-r3, r12, lr }\n"
         "mov     r1, r5\n"
         "ldr     r2, .L0\n"
         "mov     r3, #1\n"
