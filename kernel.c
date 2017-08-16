@@ -50,19 +50,7 @@ void yield(void){
   asm volatile("svc #200");
 }
 
-void threadStarter(void){
-  // Call the entry point for this thread. The next line returns
-  // only when the thread exits.
-  (*(threadTable[currThread]))();
 
-  // Do thread-specific cleanup tasks. Currently, this just means marking
-  // the thread as inactive. This function runs in user thread context.
-  threads[currThread].active = 0;
-  
-  // This yield returns to the scheduler and never returns back since
-  // the scheduler identifies the thread as inactive.
-  yield();
-}
 
 void init_kernel(void){
     threadIndexes = -1;
@@ -136,8 +124,8 @@ void SwitchContext(){
             "orr r0, 0x1\n"
             "msr CONTROL, r0\n"
             "isb\n"
-            "movw lr, #0xfffd\n"
-            "movt lr, #0xffff\n"
+            "movw lr, 0xfffd\n"
+            "movt lr, 0xffff\n"
             "bx lr"
   );
 }
